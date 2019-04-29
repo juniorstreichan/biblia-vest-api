@@ -4,9 +4,10 @@
   "description": "API REST de perguntas sobre a Bíblia sagrada",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -w src --exec \"babel-node src --presets env\" ",
-    "build": "rimraf dist && babel src -s -D -d dist --presets env",
-    "start": "node dist"
+    "dev": "nodemon -w src --exec \"babel-node src/server.js --presets env\" --ignore __tests__",
+    "build": "rimraf dist && babel src  -D -d dist --presets env",
+    "start": "node dist/server.js",
+    "test": "NODE_ENV=test jest"
   },
   "keywords": [],
   "author": "Junior Erdmann Streichan",
@@ -14,10 +15,20 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "nodemon": "^1.18.11"
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-jest": "^22.5.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "jest": "^24.7.1",
+    "nodemon": "^1.18.11",
+    "prettier": "^1.17.0",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
