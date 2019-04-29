@@ -27,10 +27,11 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
-// eslint-disable-next-line func-names
-UserSchema.pre('save', async function () {
-  const hash = await bcryptjs.hash(this.password, 10);
-  this.rules.push = 'default';
+
+UserSchema.pre('save', async function preSave() {
+  const pass = this.password;
+  const hash = await bcryptjs.hash(pass.toString(), 10);
+  this.rules = [...this.rules, 'default'] || ['default'];
   this.password = hash;
 });
 
