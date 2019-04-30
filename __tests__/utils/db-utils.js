@@ -1,10 +1,7 @@
 import mongoose from 'mongoose';
-import MongoMemoryServer from 'mongodb-memory-server';
 
-const mongoServer = new MongoMemoryServer();
 export async function connectMongoDBTest() {
-
-  const mongoUri = await mongoServer.getConnectionString();
+  const mongoUri = 'mongodb://127.0.0.1:27017/tests';
   const mongooseOpts = {
     autoReconnect: true,
     reconnectTries: Number.MAX_VALUE,
@@ -12,7 +9,10 @@ export async function connectMongoDBTest() {
     useNewUrlParser: true,
   };
   console.log('mongoUri => ', mongoUri);
-  await mongoose.connect(mongoUri, mongooseOpts);
+  await mongoose.connect(mongoUri, mongooseOpts, async () => {
+    /* Drop the DB */
+    await mongoose.connection.db.dropDatabase();
+  });
   mongoose.connection.on('error', (e) => {
     if (e.message.code === 'ETIMEDOUT') {
       console.log(e);
@@ -27,6 +27,6 @@ export async function connectMongoDBTest() {
 }
 
 export async function disconnectMongoDBTest() {
-  mongoose.disconnect();
-  await mongoServer.stop();
+  await mongoose.connection.db.dropDatabase();
+  await mongoose.disconnect();
 }

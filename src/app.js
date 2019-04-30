@@ -1,17 +1,19 @@
-/* eslint-disable class-methods-use-this */
-import express from 'express';
-import mongoose from 'mongoose';
 import cors from 'cors';
+import express from 'express';
 import dotenvConfig from './configs/dotenv-config';
+import authRoute from './routes/auth-route';
 
 class App {
   constructor() {
     dotenvConfig();
     this.express = express();
     this.middlewares();
+    this.routes();
   }
 
-  routes() {}
+  routes() {
+    this.express.use('/auth', authRoute);
+  }
 
   middlewares() {
     this.express.use(express.json());

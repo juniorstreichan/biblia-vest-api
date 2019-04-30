@@ -23,7 +23,6 @@
     "eslint-plugin-prettier": "^3.0.1",
     "faker": "^4.1.0",
     "jest": "^24.7.1",
-    "mongodb-memory-server": "^5.1.0",
     "nodemon": "^1.18.11",
     "prettier": "^1.17.0",
     "supertest": "^4.0.2",

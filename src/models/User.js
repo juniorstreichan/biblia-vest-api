@@ -27,7 +27,6 @@ const UserSchema = new Schema(
   { timestamps: true },
 );
 
-
 UserSchema.pre('save', async function preSave() {
   const pass = this.password;
   const hash = await bcryptjs.hash(pass.toString(), 10);
