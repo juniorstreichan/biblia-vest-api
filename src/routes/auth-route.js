@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import AuthController from '../controllers/AuthController';
+import { newUserMiddleware, loginMiddleware } from '../middlewares/user-middlewares';
 
-const router = Router();
+const authRouter = Router();
 
-router.post('/create', AuthController.store);
+authRouter.post('/create', newUserMiddleware, AuthController.store);
 
-router.post('/', async (req, res) => res.status(401).send());
+authRouter.post('/', loginMiddleware, AuthController.login);
 
-export default router;
+export default authRouter;

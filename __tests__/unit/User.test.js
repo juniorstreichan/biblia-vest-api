@@ -1,10 +1,13 @@
 import faker from 'faker';
 import User from '../../src/models/User';
-import { connectMongoDBTest } from '../utils/db-utils';
+import { connectMongoDBTest, disconnectMongoDBTest } from '../utils/db-utils';
 
 describe('Suite test CRUD model User', () => {
   beforeAll(async () => {
     await connectMongoDBTest();
+  });
+  afterAll(async () => {
+    await disconnectMongoDBTest();
   });
 
   const user = {
@@ -33,7 +36,7 @@ describe('Suite test CRUD model User', () => {
     const newEmail = faker.internet.email().toLowerCase();
     await User.findOneAndUpdate({ _id: user._id }, { $set: { email: newEmail.toLowerCase() } });
     const updateUser = await User.findById(user._id);
-    console.log(newEmail, updateUser.email);
+    console.log(`${newEmail} === ${updateUser.email}`);
     user.email = updateUser.email;
     expect(updateUser.email).toBe(newEmail);
   });

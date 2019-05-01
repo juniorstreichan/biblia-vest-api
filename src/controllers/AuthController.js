@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcryptjs from 'bcryptjs';
 import UserService from '../services/UserService';
 
 function generateToken(user) {
@@ -8,8 +9,31 @@ function generateToken(user) {
 }
 class AuthController {
   async store(req, res) {
-    const user = await UserService.create(req.body);
-    return res.status(201).send({ user, token: generateToken(user) });
+    try {
+      const user = await UserService.create(req.body);
+
+      return res.status(201).send({ user, token: generateToken(user) });
+    } catch (error) {
+      return res.sendStatus(500);
+    }
+  }
+
+  async login(req, res) {
+    const { email, password } = req.body;
+    try {
+      const user = await UserService.findByEmail(email);
+      if (!user) {
+        return res.status(404).send({ message: 'Usuário não encontrado' });
+      }
+
+      if (!(await bcryptjs.compare(password, user.password))) {
+        return res.status(404).send({ message: 'Senha inválida' });
+      }
+      user.password = undefined;
+      return res.status(200).send({ user, token: generateToken(user) });
+    } catch (error) {
+      return res.sendStatus(500);
+    }
   }
 }
 

@@ -1,7 +1,11 @@
 import mongoose from 'mongoose';
+import dotenvConfig from '../../src/configs/dotenv-config';
+
+dotenvConfig();
 
 export async function connectMongoDBTest() {
-  const mongoUri = 'mongodb://127.0.0.1:27017/tests';
+  jest.setTimeout(60000);
+  const mongoUri = process.env.DATABASE_TEST_CONNECTION;
   const mongooseOpts = {
     autoReconnect: true,
     reconnectTries: Number.MAX_VALUE,
@@ -27,6 +31,6 @@ export async function connectMongoDBTest() {
 }
 
 export async function disconnectMongoDBTest() {
-  await mongoose.connection.db.dropDatabase();
+  await mongoose.connection.dropCollection('users');
   await mongoose.disconnect();
 }
