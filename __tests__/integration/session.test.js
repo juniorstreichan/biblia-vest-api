@@ -12,7 +12,7 @@ describe('Authentication test Suite', () => {
   });
   const user = {
     name: faker.name.findName(),
-    email: faker.internet.email(),
+    email: faker.internet.email().toLowerCase(),
     password: faker.internet.password(),
   };
 
@@ -104,6 +104,15 @@ describe('Authentication test Suite', () => {
     expect(response.body).toHaveProperty('user');
   });
 
+  it('should not do login without request body', async () => {
+    const response = await request(App)
+      .post('/auth')
+      .send(null);
+
+    console.log('response', response.body.message);
+    expect(response.status).toBe(400);
+  });
+
   it('should not do login without email', async () => {
     const response = await request(App)
       .post('/auth')
@@ -143,7 +152,7 @@ describe('Authentication test Suite', () => {
   it('should not do login with invalid password', async () => {
     const response = await request(App)
       .post('/auth')
-      .send({ ...user, password: '123465789' });
+      .send({ ...user, password: 'AAAAAAAAAAAAAAAAA' });
 
     console.log('response', response.body.message);
     expect(response.status).toBe(404);

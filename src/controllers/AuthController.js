@@ -14,14 +14,18 @@ class AuthController {
 
       return res.status(201).send({ user, token: generateToken(user) });
     } catch (error) {
+      /* istanbul ignore next */
       return res.sendStatus(500);
     }
   }
 
   async login(req, res) {
     const { email, password } = req.body;
+    console.log('email, password', email, password);
+
     try {
       const user = await UserService.findByEmail(email);
+
       if (!user) {
         return res.status(404).send({ message: 'Usuário não encontrado' });
       }
@@ -32,6 +36,7 @@ class AuthController {
       user.password = undefined;
       return res.status(200).send({ user, token: generateToken(user) });
     } catch (error) {
+      /* istanbul ignore next */
       return res.sendStatus(500);
     }
   }

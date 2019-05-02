@@ -6,12 +6,14 @@ const UserSchema = new Schema(
     name: {
       type: String,
       require: true,
+      trim: true,
     },
     email: {
       type: String,
       require: true,
       unique: true,
       lowercase: true,
+      trim: true,
     },
     password: {
       type: String,
@@ -21,6 +23,7 @@ const UserSchema = new Schema(
     rules: [
       {
         type: String,
+        trim: true,
       },
     ],
   },
@@ -30,7 +33,7 @@ const UserSchema = new Schema(
 UserSchema.pre('save', async function preSave() {
   const pass = this.password;
   const hash = await bcryptjs.hash(pass.toString(), 10);
-  this.rules = [...this.rules, 'default'] || ['default'];
+  this.rules = ['default'];
   this.password = hash;
 });
 

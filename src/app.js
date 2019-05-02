@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import dotenvConfig from './configs/dotenv-config';
 import authRoute from './routes/auth-route';
+import questionRoute from './routes/question-route';
 
 class App {
   constructor() {
@@ -14,6 +15,7 @@ class App {
 
   routes() {
     this.express.use('/auth', authRoute);
+    this.express.use('/questions', questionRoute);
   }
 
   middlewares() {
