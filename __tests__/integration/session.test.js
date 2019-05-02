@@ -27,6 +27,15 @@ describe('Authentication test Suite', () => {
     expect(response.body).toHaveProperty('user');
   });
 
+  it('should reject a new User from the http request with email repeted', async () => {
+    const response = await request(App)
+      .post('/auth/create')
+      .send(user);
+
+    console.log('response', response.body.message);
+    expect(response.status).toBe(400);
+  });
+
   it('should reject a new User invalid from the http request', async () => {
     const response = await request(App)
       .post('/auth/create')

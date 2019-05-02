@@ -14,15 +14,16 @@ class AuthController {
 
       return res.status(201).send({ user, token: generateToken(user) });
     } catch (error) {
-      /* istanbul ignore next */
-      return res.sendStatus(500);
+      console.log(error.message);
+      const message = error.code === 11000
+        ? `Já existe um usuário cadastrado com o email:${req.body.email}`
+        : /* istanbul ignore next */ 'Bad request';
+      return res.status(400).send({ message });
     }
   }
 
   async login(req, res) {
     const { email, password } = req.body;
-    console.log('email, password', email, password);
-
     try {
       const user = await UserService.findByEmail(email);
 
@@ -37,7 +38,7 @@ class AuthController {
       return res.status(200).send({ user, token: generateToken(user) });
     } catch (error) {
       /* istanbul ignore next */
-      return res.sendStatus(500);
+      return res.status(400).send({ message: 'Bad request' });
     }
   }
 }
