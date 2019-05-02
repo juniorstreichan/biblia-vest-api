@@ -4,7 +4,7 @@
   "description": "API REST de perguntas sobre a Bíblia sagrada",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -w src --exec \"babel-node src/server.js --presets env\" --ignore __tests__",
+    "dev": "NODE_ENV=dev nodemon -w src --exec \"babel-node src/server.js --presets env\" --ignore __tests__",
     "build": "rimraf dist && babel src  -D -d dist --presets env",
     "start": "node dist/server.js",
     "test": "NODE_ENV=test jest",
@@ -36,6 +36,7 @@
     "helmet": "^3.16.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.3",
+    "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.3",
     "yup": "^0.27.0"
   }
