@@ -4,8 +4,9 @@ import dotenvConfig from '../../src/configs/dotenv-config';
 dotenvConfig();
 
 export async function connectMongoDBTest() {
+  const version = new Date().getMilliseconds().toString();
   jest.setTimeout(60000);
-  const mongoUri = process.env.DATABASE_TEST_CONNECTION;
+  const mongoUri = process.env.DATABASE_TEST_CONNECTION + version;
   const mongooseOpts = {
     autoReconnect: true,
     reconnectTries: Number.MAX_VALUE,
@@ -31,6 +32,6 @@ export async function connectMongoDBTest() {
 }
 
 export async function disconnectMongoDBTest() {
-  await mongoose.connection.dropCollection('users');
+  await mongoose.connection.db.dropDatabase();
   await mongoose.disconnect();
 }
