@@ -23,15 +23,18 @@ describe('Suite test CRUD model Question', () => {
     categories: [],
     active: true,
   };
-
-  it('should create a new Question model', async () => {
+  it('should create a new Category models', async () => {
     const categories = await Category.create([
       { name: faker.name.jobArea() },
       { name: faker.name.jobArea() },
     ]);
-
-    question.categories = categories.map(cat => cat._id);
     console.log('categories', categories);
+    question.categories = categories.map(cat => cat._id);
+    expect(categories).not.toBeNull();
+    expect(categories.length).toBe(2);
+  });
+
+  it('should create a new Question model', async () => {
     const newQuestion = await Question.create(question);
 
     question._id = newQuestion._id;
@@ -93,8 +96,23 @@ describe('Suite test CRUD model Question', () => {
     expect(msgError).not.toBeNull();
   });
 
-  // it('should update Question', async () => {
-  //   question.alternatives.push({ id: 5, description: faker.lorem.sentence(3) });
-  //   const updateQuestion = await Question.updateOne({ _id: question._id }, { ...question });
-  // });
+  it('should update Question', async () => {
+    question.alternatives.push({ id: 5, description: faker.lorem.sentence(3) });
+
+    await Question.findOneAndUpdate(
+      { _id: question._id },
+      { ...question, correct: 5 },
+    );
+    const updateQuestion = await Question.findById(question._id);
+
+    expect(updateQuestion.correct).toBe(5);
+    expect(updateQuestion.alternatives.length).toBe(5);
+  });
+
+  it('should delete Question', async () => {
+    await Question.findOneAndDelete({ _id: question._id });
+    const deletedQuestion = await Question.findById(question._id);
+
+    expect(deletedQuestion).toBeNull();
+  });
 });

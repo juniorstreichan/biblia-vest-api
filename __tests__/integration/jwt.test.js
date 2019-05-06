@@ -29,7 +29,7 @@ describe('JWT Token test suite', () => {
 
   it('should http request to protected endpoint with jwt token', async () => {
     const response = await request(App)
-      .post('/questions')
+      .post('/questions/test-jwt')
       .set('Authorization', `Bearer ${user.token}`)
       .send();
 
@@ -38,7 +38,7 @@ describe('JWT Token test suite', () => {
 
   it('should reject http request to protected endpoint without jwt token', async () => {
     const response = await request(App)
-      .post('/questions')
+      .post('/questions/test-jwt')
       .send();
     console.log('response', response.body.message);
 
@@ -47,7 +47,7 @@ describe('JWT Token test suite', () => {
 
   it('should reject http request to protected endpoint with malformatted jwt token', async () => {
     const response = await request(App)
-      .post('/questions')
+      .post('/questions/test-jwt')
       .set('Authorization', `Beare ${user.token}`)
       .send();
     console.log('response', response.body.message);
@@ -57,7 +57,7 @@ describe('JWT Token test suite', () => {
 
   it('should reject http request to protected endpoint with invalid jwt token', async () => {
     const response = await request(App)
-      .post('/questions')
+      .post('/questions/test-jwt')
       .set('Authorization', 'Bearer testeee')
       .send();
     console.log('response', response.body.message);
