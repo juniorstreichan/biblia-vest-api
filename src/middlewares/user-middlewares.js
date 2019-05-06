@@ -1,39 +1,33 @@
 import * as yup from 'yup';
-
-const msgErros = {
-  emailInvalid: 'Email inválido',
-  emailRequired: 'Email obrigatório',
-  nameRequired: 'Nome é obrigatório',
-  passRequired: 'Senha é obrigatória',
-  passInvalid: 'Senha inválida, mínimo 8 caracteres',
-};
+import messages from '../configs/messages';
+import { noBodyRequest } from './commons-middlewares';
 
 const userSchema = yup.object().shape({
-  name: yup.string().required(msgErros.nameRequired),
+  name: yup.string().required(messages.userNameRequired),
   email: yup
     .string()
-    .email(msgErros.emailInvalid)
-    .required(msgErros.emailRequired),
+    .email(messages.userEmailInvalid)
+    .required(messages.userEmailRequired),
   password: yup
     .string()
-    .required(msgErros.passRequired)
-    .min(8, msgErros.passInvalid),
+    .required(messages.userPassRequired)
+    .min(8, messages.userPassInvalid),
 });
 
 const loginSchema = yup.object().shape({
   email: yup
     .string()
-    .email(msgErros.emailInvalid)
-    .required(msgErros.emailRequired),
+    .email(messages.userEmailInvalid)
+    .required(messages.userEmailRequired),
   password: yup
     .string()
-    .min(8, msgErros.passInvalid)
-    .required(msgErros.passRequired),
+    .min(8, messages.userPassInvalid)
+    .required(messages.userPassRequired),
 });
 
 export async function newUserMiddleware(req, res, next) {
-  if (!req.body || Object.keys(req.body).length <= 0) {
-    return res.status(400).send({ message: 'Requisição inválida' });
+  if (noBodyRequest(req)) {
+    return res.status(400).send({ message: messages.requestInvalid });
   }
   try {
     await userSchema.validate(req.body);
@@ -44,8 +38,8 @@ export async function newUserMiddleware(req, res, next) {
 }
 
 export async function loginMiddleware(req, res, next) {
-  if (!req.body || Object.keys(req.body).length <= 0) {
-    return res.status(400).send({ message: 'Requisição inválida' });
+  if (noBodyRequest(req)) {
+    return res.status(400).send({ message: messages.requestInvalid });
   }
   try {
     await loginSchema.validate(req.body);

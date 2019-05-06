@@ -14,8 +14,8 @@ class App {
   }
 
   routes() {
-    this.express.use('/auth', authRoute);
-    this.express.use('/questions', questionRoute);
+    this.express.use(authRoute.baseUrl, authRoute);
+    this.express.use(questionRoute.baseUrl, questionRoute);
   }
 
   middlewares() {
