@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import jwtAuthenticationMiddleware from '../middlewares/auth-middlewares';
-import { newQuestionMiddleware } from '../middlewares/question-middlewares';
+import {
+  newQuestionMiddleware,
+  newCategoryMiddleware,
+} from '../middlewares/question-middlewares';
 import Category from '../models/Category';
+import QuestionController from '../controllers/QuestionController';
 
 const questionRoute = Router();
 questionRoute.baseUrl = '/questions';
@@ -9,11 +13,7 @@ questionRoute.post(
   '/',
   jwtAuthenticationMiddleware,
   newQuestionMiddleware,
-  (req, res) => {
-    console.log(req.body);
-
-    return res.sendStatus(201);
-  },
+  QuestionController.store,
 );
 
 questionRoute.post('/test-jwt', jwtAuthenticationMiddleware, (req, res) => {
@@ -25,10 +25,10 @@ questionRoute.post('/test-jwt', jwtAuthenticationMiddleware, (req, res) => {
 questionRoute.post(
   '/categories',
   jwtAuthenticationMiddleware,
+  newCategoryMiddleware,
   async (req, res) => {
     try {
       const cats = await Category.create(req.body);
-
       return res.status(201).send(cats);
     } catch (error) {
       console.log(error.message);

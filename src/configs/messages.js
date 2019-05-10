@@ -3,7 +3,7 @@ export default {
   requestInvalid: 'Requisição inválida',
   userEmailInvalid: 'Email inválido',
   userEmailRequired: 'Email obrigatório',
-  userNameRequired: 'Nome é obrigatório',
+  userNameRequired: 'Nome do usuário é obrigatório',
   userPassRequired: 'Senha é obrigatória',
   userPassInvalid: 'Senha inválida, mínimo 8 caracteres',
   questionDescriptionRequired: 'Descrição obrigatória',
@@ -12,4 +12,5 @@ export default {
   questionCorrectInvalid: 'Alternativa correta inválida',
   questionCategoriesMin:
     'Questão inválida, é obrigatório ao menos uma categoria',
+  categoryNameRequired: 'Nome da categoria é obrigatório',
 };

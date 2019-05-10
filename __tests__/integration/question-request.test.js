@@ -1,9 +1,9 @@
 import faker from 'faker';
-import request from 'supertest';
+import httpRequest from 'supertest';
 import App from '../../src/app';
 import { connectMongoDBTest, disconnectMongoDBTest } from '../utils/db-utils';
 
-describe('JWT Token test suite', () => {
+describe('Question test suite', () => {
   beforeAll(async () => {
     await connectMongoDBTest();
   });
@@ -29,7 +29,7 @@ describe('JWT Token test suite', () => {
   };
 
   it('should create a new User from the http request', async () => {
-    const response = await request(App)
+    const response = await httpRequest(App)
       .post('/auth/create')
       .send(user);
 
@@ -40,24 +40,68 @@ describe('JWT Token test suite', () => {
   });
 
   it('should create a new Category models from the http request', async () => {
-    const response = await request(App)
+    const response = await httpRequest(App)
       .post('/questions/categories')
       .set('Authorization', `Bearer ${user.token}`)
       .send([{ name: faker.name.jobArea() }, { name: faker.name.jobArea() }]);
 
-    console.log('response', response.body);
+    console.log('response-categories', response.body);
     question.categories = response.body.map(cat => cat._id);
     expect(response.body).not.toBeNull();
     expect(response.body.length).toBe(2);
   });
 
+  it('should reject no body http request of Category', async () => {
+    const response = await httpRequest(App)
+      .post('/questions/categories')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send(null);
+
+    expect(response.status).toBe(400);
+  });
+  it('should reject invalid http request of Category', async () => {
+    const response = await httpRequest(App)
+      .post('/questions/categories')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send([{ teste: null }]);
+
+    expect(response.status).toBe(422);
+  });
+
   it('should create a new Question model from the http request', async () => {
-    const response = await request(App)
+    const response = await httpRequest(App)
       .post('/questions')
       .set('Authorization', `Bearer ${user.token}`)
       .send(question);
-
+    question._id = response.body._id;
     expect(response.status).toBe(201);
     expect(response.body).not.toBeNull();
+  });
+
+  it('should reject no body http request Question', async () => {
+    const response = await httpRequest(App)
+      .post('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send(null);
+
+    expect(response.status).toBe(400);
+  });
+
+  it('should reject invalid http request Question without description', async () => {
+    const response = await httpRequest(App)
+      .post('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ ...question, _id: undefined, description: '' });
+
+    expect(response.status).toBe(422);
+  });
+
+  it('should reject invalid http request Question without alternatives', async () => {
+    const response = await httpRequest(App)
+      .post('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ ...question, _id: undefined, alternatives: [] });
+
+    expect(response.status).toBe(422);
   });
 });

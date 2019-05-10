@@ -16,9 +16,15 @@ const newQuestionSchema = yup.object().shape({
   correct: yup.number().min(1, messages.questionCorrectInvalid),
   categories: yup.array(yup.string()).min(1, messages.questionCategoriesMin),
   active: yup.bool(),
-  createdAt: yup.date(),
-  updatedAt: yup.date(),
+  // createdAt: yup.date(),
+  // updatedAt: yup.date(),
 });
+
+const newCategorySchema = yup.array(
+  yup.object().shape({
+    name: yup.string().required(messages.categoryNameRequired),
+  }),
+);
 
 export async function newQuestionMiddleware(req, res, next) {
   if (noBodyRequest(req)) {
@@ -30,6 +36,18 @@ export async function newQuestionMiddleware(req, res, next) {
   } catch (error) {
     console.log('[error]', error.message);
 
+    return res.status(422).send({ message: error.message });
+  }
+}
+
+export async function newCategoryMiddleware(req, res, next) {
+  if (noBodyRequest(req)) {
+    return res.status(400).send({ message: messages.requestInvalid });
+  }
+  try {
+    await newCategorySchema.validate(req.body);
+    return next();
+  } catch (error) {
     return res.status(422).send({ message: error.message });
   }
 }
