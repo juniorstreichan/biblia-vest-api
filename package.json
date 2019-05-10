@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "NODE_ENV=dev nodemon -w src --exec \"babel-node src/server.js --presets env\" --ignore __tests__",
+    "debug": "NODE_ENV=dev nodemon -w src --inspect ./src/server.js --exec \"babel-node src/server.js --presets env\" --ignore __tests__",
     "build": "rimraf dist && babel src  -D -d dist --presets env",
     "start": "node dist/server.js",
     "test": "NODE_ENV=test jest",
