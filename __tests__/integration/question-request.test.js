@@ -57,6 +57,7 @@ describe('Question test suite', () => {
       .set('Authorization', `Bearer ${user.token}`)
       .send(null);
 
+    console.log(response.body.message);
     expect(response.status).toBe(400);
   });
   it('should reject invalid http request of Category', async () => {
@@ -65,6 +66,7 @@ describe('Question test suite', () => {
       .set('Authorization', `Bearer ${user.token}`)
       .send([{ teste: null }]);
 
+    console.log(response.body.message);
     expect(response.status).toBe(422);
   });
 
@@ -84,6 +86,7 @@ describe('Question test suite', () => {
       .set('Authorization', `Bearer ${user.token}`)
       .send(null);
 
+    console.log(response.body.message);
     expect(response.status).toBe(400);
   });
 
@@ -93,6 +96,7 @@ describe('Question test suite', () => {
       .set('Authorization', `Bearer ${user.token}`)
       .send({ ...question, _id: undefined, description: '' });
 
+    console.log(response.body.message);
     expect(response.status).toBe(422);
   });
 
@@ -102,6 +106,34 @@ describe('Question test suite', () => {
       .set('Authorization', `Bearer ${user.token}`)
       .send({ ...question, _id: undefined, alternatives: [] });
 
+    console.log(response.body.message);
     expect(response.status).toBe(422);
+  });
+
+  it('should reject invalid http request Question with invalid alternatives(id repeted)', async () => {
+    const alternativesError = [
+      { id: 1, description: faker.lorem.sentence(3) },
+      { id: 2, description: faker.lorem.sentence(3) },
+      { id: 3, description: faker.lorem.sentence(3) },
+      { id: 3, description: faker.lorem.sentence(3) },
+    ];
+
+    const response = await httpRequest(App)
+      .post('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ ...question, _id: undefined, alternatives: alternativesError });
+
+    console.log(response.body.message);
+    expect(response.status).toBe(400);
+  });
+
+  it('should reject invalid http request Question with correct alternative not found', async () => {
+    const response = await httpRequest(App)
+      .post('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ ...question, _id: undefined, correct: 999 });
+
+    console.log(response.body.message);
+    expect(response.status).toBe(400);
   });
 });
