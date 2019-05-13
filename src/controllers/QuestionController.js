@@ -6,7 +6,7 @@ class QuestionController {
       const newQuestion = await QuestionService.create(req.body);
       return res.status(201).send(newQuestion);
     } catch (error) {
-      console.log('error', error);
+      console.log('[error]', error);
       return res.status(400).send({ message: error.message });
     }
   }

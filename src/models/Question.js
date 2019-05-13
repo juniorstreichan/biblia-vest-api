@@ -46,7 +46,7 @@ QuestionSchema.path('alternatives').validate((alternatives) => {
     }
   });
   return alternatives.length > 2 && noRepeat;
-});
+}, 'Questão inválida, questões com identificador repetido');
 
 QuestionSchema.pre('save', preSave);
 QuestionSchema.pre('update', preSave);

@@ -34,8 +34,6 @@ export async function newQuestionMiddleware(req, res, next) {
     await newQuestionSchema.validate(req.body);
     return next();
   } catch (error) {
-    console.log('[error]', error.message);
-
     return res.status(422).send({ message: error.message });
   }
 }
