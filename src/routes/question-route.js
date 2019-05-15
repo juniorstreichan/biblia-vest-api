@@ -2,7 +2,11 @@ import { Router } from 'express';
 import CategoryController from '../controllers/CategoryController';
 import QuestionController from '../controllers/QuestionController';
 import jwtAuthenticationMiddleware from '../middlewares/auth-middlewares';
-import { newCategoryMiddleware, newQuestionMiddleware } from '../middlewares/question-middlewares';
+import {
+  newCategoryMiddleware,
+  newQuestionMiddleware,
+  updateQuestionMiddleware,
+} from '../middlewares/question-middlewares';
 
 const questionRoute = Router();
 questionRoute.baseUrl = '/questions';
@@ -11,6 +15,12 @@ questionRoute.post(
   jwtAuthenticationMiddleware,
   newQuestionMiddleware,
   QuestionController.store,
+);
+questionRoute.put(
+  '/',
+  jwtAuthenticationMiddleware,
+  updateQuestionMiddleware,
+  QuestionController.update,
 );
 
 questionRoute.post('/test-jwt', jwtAuthenticationMiddleware, (req, res) => {

@@ -16,7 +16,7 @@ describe('Question test suite', () => {
     password: faker.internet.password(),
   };
   const question = {
-    description: faker.lorem.sentence(10),
+    description: faker.lorem.sentence(10, 10),
     alternatives: [
       { id: 1, description: faker.lorem.sentence(3) },
       { id: 2, description: faker.lorem.sentence(3) },
@@ -135,5 +135,30 @@ describe('Question test suite', () => {
 
     console.log(response.body.message);
     expect(response.status).toBe(400);
+  });
+
+  it('should update the Question from the http request', async () => {
+    const response = await httpRequest(App)
+      .put('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({ ...question, description: faker.lorem.sentence(10, 10) });
+
+    question.description = response.body.description;
+    // console.log(response.body);
+    expect(response.status).toBe(200);
+  });
+
+  it('should reject update the Question without _id', async () => {
+    const response = await httpRequest(App)
+      .put('/questions')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send({
+        ...question,
+        _id: undefined,
+        description: faker.lorem.sentence(10, 10),
+      });
+
+    // console.log(response.body);
+    expect(response.status).toBe(422);
   });
 });
