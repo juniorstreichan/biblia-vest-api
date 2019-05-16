@@ -1,7 +1,7 @@
-import faker from 'faker';
 import request from 'supertest';
 import App from '../../src/app';
 import { connectMongoDBTest, disconnectMongoDBTest } from '../utils/db-utils';
+import { generateUser } from '../utils/mock-data';
 
 describe('JWT Token test suite', () => {
   beforeAll(async () => {
@@ -10,11 +10,7 @@ describe('JWT Token test suite', () => {
   afterAll(async () => {
     await disconnectMongoDBTest();
   });
-  const user = {
-    name: faker.name.findName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
-  };
+  const user = generateUser();
 
   it('should create a new User from the http request', async () => {
     const response = await request(App)

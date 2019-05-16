@@ -2,6 +2,7 @@ import faker from 'faker';
 import httpRequest from 'supertest';
 import App from '../../src/app';
 import { connectMongoDBTest, disconnectMongoDBTest } from '../utils/db-utils';
+import { generateQuestion, generateUser, generateCategory } from '../utils/mock-data';
 
 describe('Question test suite', () => {
   beforeAll(async () => {
@@ -10,23 +11,10 @@ describe('Question test suite', () => {
   afterAll(async () => {
     await disconnectMongoDBTest();
   });
-  const user = {
-    name: faker.name.findName(),
-    email: faker.internet.email(),
-    password: faker.internet.password(),
-  };
-  const question = {
-    description: faker.lorem.sentence(10, 10),
-    alternatives: [
-      { id: 1, description: faker.lorem.sentence(3) },
-      { id: 2, description: faker.lorem.sentence(3) },
-      { id: 3, description: faker.lorem.sentence(3) },
-      { id: 4, description: faker.lorem.sentence(3) },
-    ],
-    correct: 1,
-    categories: [],
-    active: true,
-  };
+  const user = generateUser();
+  const question = generateQuestion();
+
+  generateQuestion(10);
 
   it('should create a new User from the http request', async () => {
     const response = await httpRequest(App)
@@ -43,7 +31,7 @@ describe('Question test suite', () => {
     const response = await httpRequest(App)
       .post('/questions/categories')
       .set('Authorization', `Bearer ${user.token}`)
-      .send([{ name: faker.name.jobArea() }, { name: faker.name.jobArea() }]);
+      .send(generateCategory(2));
 
     console.log('response-categories', response.body);
     question.categories = response.body.map(cat => cat._id);
@@ -162,3 +150,5 @@ describe('Question test suite', () => {
     expect(response.status).toBe(422);
   });
 });
+
+describe('Public requests of Question ', () => {});
