@@ -36,4 +36,6 @@ questionRoute.post(
   CategoryController.store,
 );
 
+questionRoute.get('/', QuestionController.getValid);
+
 export default questionRoute;

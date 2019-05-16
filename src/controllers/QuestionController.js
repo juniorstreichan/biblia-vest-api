@@ -22,5 +22,17 @@ class QuestionController {
       return res.status(400).send({ message: error.message });
     }
   }
+
+  async getValid(req, res) {
+    try {
+      const questions = await QuestionService.findValid();
+      return res.status(200).send(questions);
+    } catch (error) {
+      /* istanbul ignore next */
+      console.log('[error]', error);
+      /* istanbul ignore next */
+      return res.status(400).send({ message: error.message });
+    }
+  }
 }
 export default new QuestionController();
