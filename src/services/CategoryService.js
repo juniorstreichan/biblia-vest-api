@@ -1,8 +1,8 @@
-import Category from '../models/Category';
+import Repository from '../models/Category';
 
 class CategoryService {
   async create(category) {
-    const newQuestion = await Category.create(category);
+    const newQuestion = await Repository.create(category);
     return newQuestion;
   }
 }
