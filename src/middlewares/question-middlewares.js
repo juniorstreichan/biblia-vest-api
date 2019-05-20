@@ -40,6 +40,8 @@ const newCategorySchema = yup.array(
   }),
 );
 
+/* ################################################################################# */
+
 export async function newQuestionMiddleware(req, res, next) {
   if (noBodyRequest(req)) {
     return res.status(400).send({ message: messages.requestInvalid });

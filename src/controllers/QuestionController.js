@@ -34,5 +34,20 @@ class QuestionController {
       return res.status(400).send({ message: error.message });
     }
   }
+
+  async getPage(req, res) {
+    try {
+      const page = parseInt(req.query.page.replace('-', ''), 10) || 1;
+      const perPage = parseInt(req.query.perPage.replace('-', ''), 10) || 10;
+
+      const questions = await QuestionService.findPage(page, perPage);
+      return res.status(200).send(questions);
+    } catch (error) {
+      /* istanbul ignore next */
+      console.log('[error]', error);
+      /* istanbul ignore next */
+      return res.status(400).send({ message: error.message });
+    }
+  }
 }
 export default new QuestionController();

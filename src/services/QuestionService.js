@@ -19,6 +19,18 @@ class QuestionService {
 
     return questions;
   }
+
+  async findPage(page = 1, perPage = 5) {
+    const skip = page === 1 ? 0 : (page - 1) * perPage;
+    const questions = await Repository.find({}, '', {
+      skip,
+      limit: perPage,
+    })
+      .sort({ createdAt: -1 })
+      .populate('categories');
+
+    return questions;
+  }
 }
 
 export default new QuestionService();

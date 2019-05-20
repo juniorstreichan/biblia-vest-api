@@ -10,12 +10,14 @@ import {
 
 const questionRoute = Router();
 questionRoute.baseUrl = '/questions';
+
 questionRoute.post(
   '/',
   jwtAuthenticationMiddleware,
   newQuestionMiddleware,
   QuestionController.store,
 );
+
 questionRoute.put(
   '/',
   jwtAuthenticationMiddleware,
@@ -37,5 +39,7 @@ questionRoute.post(
 );
 
 questionRoute.get('/', QuestionController.getValid);
+
+questionRoute.get('/paginate', jwtAuthenticationMiddleware, QuestionController.getPage);
 
 export default questionRoute;

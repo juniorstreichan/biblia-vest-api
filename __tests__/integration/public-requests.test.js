@@ -1,9 +1,10 @@
 import httpRequest from 'supertest';
-import app from '../../src/app';
+import App from '../../src/app';
 import Category from '../../src/models/Category';
 import Question from '../../src/models/Question';
 import { connectMongoDBTest, disconnectMongoDBTest } from '../utils/db-utils';
-import { generateCategory, generateQuestion } from '../utils/mock-data';
+import { generateCategory, generateQuestion, generateUser } from '../utils/mock-data';
+import AuthController from '../../src/controllers/AuthController';
 
 describe('Public Requests test suite', () => {
   beforeAll(async () => {
@@ -12,7 +13,7 @@ describe('Public Requests test suite', () => {
   afterAll(async () => {
     await disconnectMongoDBTest();
   });
-
+  const user = generateUser();
   it('should create the Questions for find', async () => {
     const cats = await Category.create(generateCategory(10));
     console.log('[cats]', cats);
@@ -30,13 +31,31 @@ describe('Public Requests test suite', () => {
   });
 
   it('should find All valid questions', async () => {
-    const response = await httpRequest(app)
+    const response = await httpRequest(App)
       .get('/questions')
       .send();
 
-    console.log('[questios]', response.body);
+    console.log('[questions]', response.body);
 
     expect(response.body).not.toBeNull();
+    expect(response.status).toBe(200);
+  });
+
+  it('should find paginate questions', async () => {
+    const newUser = await httpRequest(App)
+      .post('/auth/create')
+      .send(user);
+    user.token = newUser.body.token;
+
+    const response = await httpRequest(App)
+      .get('/questions/paginate?page=-2&perPage=-5')
+      .set('Authorization', `Bearer ${user.token}`)
+      .send();
+
+    console.log('[questions]', response.body);
+
+    expect(response.body).not.toBeNull();
+    expect(response.body.length).toBe(5);
     expect(response.status).toBe(200);
   });
 });
