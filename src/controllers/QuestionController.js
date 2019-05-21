@@ -49,5 +49,20 @@ class QuestionController {
       return res.status(400).send({ message: error.message });
     }
   }
+
+  async getUpdated(req, res) {
+    try {
+      const date = new Date(req.params.date);
+      console.log('req.params.date', date);
+
+      const questions = await QuestionService.findUpdated(date);
+      return res.status(200).send(questions);
+    } catch (error) {
+      /* istanbul ignore next */
+      console.log('[error]', error);
+      /* istanbul ignore next */
+      return res.status(400).send({ message: error.message });
+    }
+  }
 }
 export default new QuestionController();

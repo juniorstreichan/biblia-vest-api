@@ -31,6 +31,15 @@ class QuestionService {
 
     return questions;
   }
+
+  async findUpdated(date) {
+    const questions = await Repository.find(
+      { active: true, updatedAt: { $gte: date } },
+      'description alternatives correct',
+    ).populate('categories');
+
+    return questions;
+  }
 }
 
 export default new QuestionService();

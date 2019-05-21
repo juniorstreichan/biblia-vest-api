@@ -28,7 +28,7 @@ describe('Suite test CRUD model Question', () => {
       { name: faker.name.jobArea() },
       { name: faker.name.jobArea() },
     ]);
-    console.log('categories', categories);
+    // console.log('categories', categories);
     question.categories = categories.map(cat => cat._id);
     expect(categories).not.toBeNull();
     expect(categories.length).toBe(2);
@@ -38,7 +38,7 @@ describe('Suite test CRUD model Question', () => {
     const newQuestion = await Question.create(question);
 
     question._id = newQuestion._id;
-    console.log('newQuestion', newQuestion);
+    // console.log('newQuestion', newQuestion);
 
     expect(newQuestion).not.toBeNull();
   });
@@ -99,10 +99,7 @@ describe('Suite test CRUD model Question', () => {
   it('should update Question', async () => {
     question.alternatives.push({ id: 5, description: faker.lorem.sentence(3) });
 
-    await Question.findOneAndUpdate(
-      { _id: question._id },
-      { ...question, correct: 5 },
-    );
+    await Question.findOneAndUpdate({ _id: question._id }, { ...question, correct: 5 });
     const updateQuestion = await Question.findById(question._id);
 
     expect(updateQuestion.correct).toBe(5);

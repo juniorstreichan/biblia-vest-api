@@ -4,9 +4,8 @@ import Category from '../../src/models/Category';
 import Question from '../../src/models/Question';
 import { connectMongoDBTest, disconnectMongoDBTest } from '../utils/db-utils';
 import { generateCategory, generateQuestion, generateUser } from '../utils/mock-data';
-import AuthController from '../../src/controllers/AuthController';
 
-describe('Public Requests test suite', () => {
+describe('Public and privates queries requests test suite', () => {
   beforeAll(async () => {
     await connectMongoDBTest();
   });
@@ -16,7 +15,7 @@ describe('Public Requests test suite', () => {
   const user = generateUser();
   it('should create the Questions for find', async () => {
     const cats = await Category.create(generateCategory(10));
-    console.log('[cats]', cats);
+    // console.log('[cats]', cats);
 
     const questions = generateQuestion(10);
 
@@ -35,7 +34,7 @@ describe('Public Requests test suite', () => {
       .get('/questions')
       .send();
 
-    console.log('[questions]', response.body);
+    // console.log('[questions]', response.body);
 
     expect(response.body).not.toBeNull();
     expect(response.status).toBe(200);
@@ -48,14 +47,44 @@ describe('Public Requests test suite', () => {
     user.token = newUser.body.token;
 
     const response = await httpRequest(App)
-      .get('/questions/paginate?page=-2&perPage=-5')
+      .get('/questions/paginate?page=2&perPage=5')
       .set('Authorization', `Bearer ${user.token}`)
       .send();
 
-    console.log('[questions]', response.body);
+    // console.log('[questions]', response.body);
 
     expect(response.body).not.toBeNull();
     expect(response.body.length).toBe(5);
+    expect(response.status).toBe(200);
+  });
+
+  it('should find updates questions by date', async () => {
+    const currentDate = new Date();
+    currentDate.setDate(
+      currentDate.getDate() > 1 ? currentDate.getDate() - 1 : currentDate.getDate(),
+    );
+    const response = await httpRequest(App).get(`/questions/updated/${currentDate}`);
+
+    expect(response.body).not.toBeNull();
+    expect(response.body.length).not.toBe(0);
+    expect(response.status).toBe(200);
+  });
+
+  it('should don´t find updates questions by date', async () => {
+    const currentDate = new Date();
+    currentDate.setFullYear(3099);
+    const response = await httpRequest(App).get(`/questions/updated/${currentDate}`);
+
+    expect(response.body).not.toBeNull();
+    expect(response.body.length).toBe(0);
+    expect(response.status).toBe(200);
+  });
+
+  it('should find categories', async () => {
+    const response = await httpRequest(App).get('/questions/categories');
+
+    expect(response.body).not.toBeNull();
+    expect(response.body.length).not.toBe(0);
     expect(response.status).toBe(200);
   });
 });

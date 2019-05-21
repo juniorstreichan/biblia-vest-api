@@ -37,8 +37,11 @@ questionRoute.post(
   newCategoryMiddleware,
   CategoryController.store,
 );
+questionRoute.get('/categories', CategoryController.getAll);
 
 questionRoute.get('/', QuestionController.getValid);
+
+questionRoute.get('/updated/:date', QuestionController.getUpdated);
 
 questionRoute.get('/paginate', jwtAuthenticationMiddleware, QuestionController.getPage);
 

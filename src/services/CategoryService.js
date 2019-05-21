@@ -2,8 +2,13 @@ import Repository from '../models/Category';
 
 class CategoryService {
   async create(category) {
-    const newQuestion = await Repository.create(category);
-    return newQuestion;
+    const newCategories = await Repository.create(category);
+    return newCategories;
+  }
+
+  async findAll() {
+    const categories = await Repository.find({}, 'name');
+    return categories;
   }
 }
 
