@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
+import messages from '../configs/messages';
 
 export default async function jwtAuthenticationMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -8,7 +9,7 @@ export default async function jwtAuthenticationMiddleware(req, res, next) {
 
   const [bearer, token] = [...authHeader.split(' ')];
 
-  if (!/^Bearer$/i.test(bearer)) return res.status(401).send({ message: 'Token malformatted' });
+  if (!/^Bearer$/i.test(bearer)) return res.status(401).send({ message: messages.jwtTokenMalformatted });
   try {
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_APP_SECRET);
 
@@ -16,6 +17,6 @@ export default async function jwtAuthenticationMiddleware(req, res, next) {
 
     return next();
   } catch (err) {
-    return res.status(401).send({ message: 'Token invalid' });
+    return res.status(401).send({ message: messages.jwtTokenInvalid });
   }
 }

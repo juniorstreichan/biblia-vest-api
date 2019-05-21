@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
 import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import messages from '../configs/messages';
 import UserService from '../services/UserService';
 
 function generateToken(user) {
@@ -16,8 +17,8 @@ class AuthController {
     } catch (error) {
       console.log(error.message);
       const message = error.code === 11000
-        ? `Já existe um usuário cadastrado com o email:${req.body.email}`
-        : /* istanbul ignore next */ 'Bad request';
+        ? `${messages.userEmailExists}:${req.body.email}`
+        : /* istanbul ignore next */ messages.httpBadRequest;
       return res.status(400).send({ message });
     }
   }
@@ -28,17 +29,17 @@ class AuthController {
       const user = await UserService.findByEmail(email);
 
       if (!user) {
-        return res.status(404).send({ message: 'Usuário não encontrado' });
+        return res.status(404).send({ message: messages.userNotFound });
       }
 
       if (!(await bcryptjs.compare(password, user.password))) {
-        return res.status(404).send({ message: 'Senha inválida' });
+        return res.status(404).send({ message: messages.userPassIncorrect });
       }
       user.password = undefined;
       return res.status(200).send({ user, token: generateToken(user) });
     } catch (error) {
       /* istanbul ignore next */
-      return res.status(400).send({ message: 'Bad request' });
+      return res.status(400).send({ message: messages.httpBadRequest });
     }
   }
 }

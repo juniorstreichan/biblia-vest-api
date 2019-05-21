@@ -1,4 +1,5 @@
 import { Error, model, Schema } from 'mongoose';
+import messages from '../configs/messages';
 
 const QuestionSchema = new Schema(
   {
@@ -29,11 +30,11 @@ async function preSave() {
   const correctAlt = this.alternatives.filter(alt => alt.id === this.correct);
 
   if (correctAlt.length < 1) {
-    throw new Error('Questão inválida, não possui alternativa correta');
+    throw new Error(messages.questionCorrectNotFound);
   }
 
   if (this.categories.length < 1) {
-    throw new Error('Questão inválida, é obrigatório ao menos uma categoria');
+    throw new Error(messages.questionCategoriesMin);
   }
 }
 
@@ -46,7 +47,7 @@ QuestionSchema.path('alternatives').validate((alternatives) => {
     }
   });
   return alternatives.length > 2 && noRepeat;
-}, 'Questão inválida, questões com identificador repetido');
+}, messages.questionAlternativesRepetedId);
 
 QuestionSchema.pre('save', preSave);
 QuestionSchema.pre('update', preSave);
