@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import messages from '../configs/messages';
 import { noBodyRequest } from './commons-middlewares';
+import logger from '../tools/logger';
 
 const userSchema = yup.object().shape({
   name: yup.string().required(messages.userNameRequired),
@@ -33,6 +34,7 @@ export async function newUserMiddleware(req, res, next) {
     await userSchema.validate(req.body);
     return next();
   } catch (error) {
+    logger.warn(error.message);
     return res.status(422).send({ message: error.message });
   }
 }
@@ -45,6 +47,7 @@ export async function loginMiddleware(req, res, next) {
     await loginSchema.validate(req.body);
     return next();
   } catch (error) {
+    logger.warn(error.message);
     return res.status(422).send({ message: error.message });
   }
 }

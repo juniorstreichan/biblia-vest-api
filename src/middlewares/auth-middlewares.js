@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { promisify } from 'util';
 import messages from '../configs/messages';
+import logger from '../tools/logger';
 
 export default async function jwtAuthenticationMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -17,6 +18,7 @@ export default async function jwtAuthenticationMiddleware(req, res, next) {
 
     return next();
   } catch (err) {
+    logger.warn(messages.jwtTokenInvalid);
     return res.status(401).send({ message: messages.jwtTokenInvalid });
   }
 }

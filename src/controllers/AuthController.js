@@ -2,6 +2,7 @@ import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import messages from '../configs/messages';
 import UserService from '../services/UserService';
+import logger from '../tools/logger';
 
 function generateToken(user) {
   return jwt.sign({ id: user._id, rules: user.rules }, process.env.JWT_APP_SECRET, {
@@ -15,7 +16,7 @@ class AuthController {
 
       return res.status(201).send({ user, token: generateToken(user) });
     } catch (error) {
-      console.log(error.message);
+      logger.error(error.message);
       const message = error.code === 11000
         ? `${messages.userEmailExists}:${req.body.email}`
         : /* istanbul ignore next */ messages.httpBadRequest;
@@ -39,6 +40,7 @@ class AuthController {
       return res.status(200).send({ user, token: generateToken(user) });
     } catch (error) {
       /* istanbul ignore next */
+      logger.error(error.message);
       return res.status(400).send({ message: messages.httpBadRequest });
     }
   }

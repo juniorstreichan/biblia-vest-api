@@ -1,9 +1,10 @@
-import 'regenerator-runtime/runtime';
-import mongoose from 'mongoose';
 import cluster from 'cluster';
+import mongoose from 'mongoose';
 import os from 'os';
+import 'regenerator-runtime/runtime';
 import App from './app';
 import dotenvConfig from './configs/dotenv-config';
+import logger from './tools/logger';
 
 function init() {
   dotenvConfig();
@@ -14,7 +15,7 @@ function init() {
 
   const port = process.env.PORT || 3334;
   App.listen(port);
-  console.log(`---------------------------------------------------------------------------------------------------------------------
+  logger.info(`\n---------------------------------------------------------------------------------------------------------------------
 ########  #### ########  ##       ####    ###       ##     ## ########  ######  ########       ###    ########  ####    
 ##     ##  ##  ##     ## ##        ##    ## ##      ##     ## ##       ##    ##    ##         ## ##   ##     ##  ##     
 ##     ##  ##  ##     ## ##        ##   ##   ##     ##     ## ##       ##          ##        ##   ##  ##     ##  ##     

@@ -1,7 +1,7 @@
-/* eslint-disable import/prefer-default-export */
 import * as yup from 'yup';
 import messages from '../configs/messages';
 import { noBodyRequest } from './commons-middlewares';
+import logger from '../tools/logger';
 
 const newQuestionSchema = yup.object().shape({
   description: yup.string().required(messages.questionDescriptionRequired),
@@ -50,6 +50,7 @@ export async function newQuestionMiddleware(req, res, next) {
     await newQuestionSchema.validate(req.body);
     return next();
   } catch (error) {
+    logger.warn(error.message);
     return res.status(422).send({ message: error.message });
   }
 }
@@ -63,6 +64,7 @@ export async function updateQuestionMiddleware(req, res, next) {
     await updateQuestionSchema.validate(req.body);
     return next();
   } catch (error) {
+    logger.warn(error.message);
     return res.status(422).send({ message: error.message });
   }
 }
@@ -75,6 +77,7 @@ export async function newCategoryMiddleware(req, res, next) {
     await newCategorySchema.validate(req.body);
     return next();
   } catch (error) {
+    logger.warn(error.message);
     return res.status(422).send({ message: error.message });
   }
 }
