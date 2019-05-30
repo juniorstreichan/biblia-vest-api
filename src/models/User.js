@@ -1,6 +1,24 @@
 import { Schema, model } from 'mongoose';
 import bcryptjs from 'bcryptjs';
-
+/**
+ * @swagger
+ *
+ * definitions:
+ *  User:
+ *    type: object
+ *    required:
+ *      - name
+ *      - email
+ *      - password
+ *    properties:
+ *       name:
+ *         type: string
+ *       password:
+ *         type: string
+ *         format: password
+ *       email:
+ *         type: string
+ */
 const UserSchema = new Schema(
   {
     name: {

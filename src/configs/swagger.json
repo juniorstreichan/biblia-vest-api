@@ -1,0 +1,40 @@
+{
+  "info": {
+    "title": "Bíblia Vest API",
+    "version": "1.0.0",
+    "description": "API de questões da bíblia"
+  },
+  "host": "localhost:3333",
+  "swagger": "2.0",
+  "paths": {
+    "/auth": {
+      "post": null
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "name",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": []
+}

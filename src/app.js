@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import dotenvConfig from './configs/dotenv-config';
 import authRoute from './routes/auth-route';
 import questionRoute from './routes/question-route';
+import swaggerRoute from './routes/swagger-route';
 
 class App {
   constructor() {
@@ -16,6 +17,7 @@ class App {
   routes() {
     this.express.use(authRoute.baseUrl, authRoute);
     this.express.use(questionRoute.baseUrl, questionRoute);
+    this.express.use(swaggerRoute.baseUrl, swaggerRoute);
   }
 
   middlewares() {

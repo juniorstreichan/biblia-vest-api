@@ -10,6 +10,11 @@ const authRouter = Router();
 authRouter.baseUrl = '/auth';
 authRouter.post('/create', newUserMiddleware, AuthController.store);
 
+/**
+ * @swagger
+ * /auth:
+ *   post:
+ */
 authRouter.post('/', loginMiddleware, AuthController.login);
 
 export default authRouter;

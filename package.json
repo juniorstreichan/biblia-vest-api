@@ -9,7 +9,8 @@
     "build": "rimraf dist && babel src  -D -d dist --presets env",
     "start": "node dist/server.js",
     "test": "NODE_ENV=test jest",
-    "test:watch": "NODE_ENV=test jest --watch"
+    "test:watch": "NODE_ENV=test jest --watch",
+    "swagger": "yarn swagger-jsdoc -d src/configs/swagger-info.js src/routes/*.js src/models/*.js -o src/configs/swagger.json"
   },
   "keywords": [],
   "author": "Junior Erdmann Streichan",
@@ -39,6 +40,8 @@
     "mongoose": "^5.5.3",
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.3",
+    "swagger-jsdoc": "^3.2.9",
+    "swagger-ui-express": "^4.0.5",
     "winston": "^3.2.1",
     "yup": "^0.27.0"
   }
