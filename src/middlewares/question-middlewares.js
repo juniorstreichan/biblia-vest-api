@@ -3,21 +3,73 @@ import messages from '../configs/messages';
 import { noBodyRequest } from './commons-middlewares';
 import logger from '../tools/logger';
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *  Alternative:
+ *      type: object
+ *      required:
+ *        - description
+ *      properties:
+ *        id:
+ *          type: number
+ *        description:
+ *          type: string
+ */
+const alternativeSchema = yup.object().shape({
+  id: yup.number().min(1),
+  description: yup.string().required(messages.questionDescriptionRequired),
+});
+
+/**
+ * @swagger
+ *
+ * definitions:
+ *  NewQuestion:
+ *   type: object
+ *   required:
+ *     - description
+ *   properties:
+ *     description:
+ *       type: string
+ *     alternatives:
+ *       type: array
+ *       items:
+ *         $ref: '#/definitions/Alternative'
+ *     correct:
+ *       type: boolean
+ *     active:
+ *       type: boolean
+ *     categories:
+ *       type: array
+ *       items:
+ *         type: string
+ */
 const newQuestionSchema = yup.object().shape({
   description: yup.string().required(messages.questionDescriptionRequired),
   alternatives: yup
-    .array(
-      yup.object().shape({
-        id: yup.number().min(1),
-        description: yup.string().required(messages.questionDescriptionRequired),
-      }),
-    )
+    .array(alternativeSchema)
+    .required(messages.questionAlternativesMin)
     .min(2, messages.questionAlternativesMin),
   correct: yup.number().min(1, messages.questionCorrectInvalid),
   categories: yup.array(yup.string()).min(1, messages.questionCategoriesMin),
   active: yup.bool(),
 });
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *  UpdateQuestion:
+ *    allOf:
+ *      - $ref: '#/definitions/NewQuestion'
+ *      - required:
+ *        - _id
+ *      - properties:
+ *         _id:
+ *          type: string
+ */
 const updateQuestionSchema = yup.object().shape({
   _id: yup.string().required(messages.questionIdRequired),
   description: yup.string().required(messages.questionDescriptionRequired),
@@ -34,6 +86,27 @@ const updateQuestionSchema = yup.object().shape({
   active: yup.bool(),
 });
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *  Category:
+ *   allOf:
+ *     - $ref: '#/definitions/NewCategory'
+ *     - required:
+ *       - _id
+ *     - properties:
+ *        _id:
+ *         type: string
+ *
+ *  NewCategory:
+ *   type: object
+ *   required:
+ *     - name
+ *   properties:
+ *     name:
+ *       type: string
+ */
 const newCategorySchema = yup.array(
   yup.object().shape({
     name: yup.string().required(messages.categoryNameRequired),

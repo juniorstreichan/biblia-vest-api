@@ -4,14 +4,172 @@
     "version": "1.0.0",
     "description": "API de questões da bíblia"
   },
-  "host": "localhost:3333",
   "swagger": "2.0",
   "paths": {
     "/auth": {
-      "post": null
+      "post": {
+        "description": "Login in the API",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLogin"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserReturn"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Not valid"
+          }
+        }
+      }
+    },
+    "/auth/create": {
+      "post": {
+        "description": "Create a new User",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserReturn"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Not valid"
+          }
+        }
+      }
     }
   },
   "definitions": {
+    "Alternative": {
+      "type": "object",
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "NewQuestion": {
+      "type": "object",
+      "required": [
+        "description"
+      ],
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "alternatives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Alternative"
+          }
+        },
+        "correct": {
+          "type": "boolean"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UpdateQuestion": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/NewQuestion"
+        },
+        {
+          "required": [
+            "_id"
+          ]
+        },
+        {
+          "properties": {
+            "_id": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "Category": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/NewCategory"
+        },
+        {
+          "required": [
+            "_id"
+          ]
+        },
+        {
+          "properties": {
+            "_id": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "NewCategory": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "required": [
@@ -28,7 +186,42 @@
           "format": "password"
         },
         "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UserLogin": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        }
+      }
+    },
+    "UserReturn": {
+      "type": "object",
+      "properties": {
+        "token": {
           "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
         }
       }
     }

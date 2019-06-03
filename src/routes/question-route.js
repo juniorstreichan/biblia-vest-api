@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import CategoryController from '../controllers/CategoryController';
 import QuestionController from '../controllers/QuestionController';
-import jwtAuthenticationMiddleware from '../middlewares/auth-middlewares';
+import jwtAuthenticationMiddleware from '../middlewares/jwt-middlewares';
 import {
   newCategoryMiddleware,
   newQuestionMiddleware,
@@ -43,6 +43,10 @@ questionRoute.get('/', QuestionController.getValid);
 
 questionRoute.get('/updated/:date', QuestionController.getUpdated);
 
-questionRoute.get('/paginate', jwtAuthenticationMiddleware, QuestionController.getPage);
+questionRoute.get(
+  '/paginate',
+  jwtAuthenticationMiddleware,
+  QuestionController.getPage,
+);
 
 export default questionRoute;

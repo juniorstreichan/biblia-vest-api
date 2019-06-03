@@ -3,6 +3,30 @@ import messages from '../configs/messages';
 import { noBodyRequest } from './commons-middlewares';
 import logger from '../tools/logger';
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *  User:
+ *    type: object
+ *    required:
+ *      - name
+ *      - email
+ *      - password
+ *    properties:
+ *       name:
+ *         type: string
+ *       password:
+ *         type: string
+ *         format: password
+ *       email:
+ *         type: string
+ *         format: email
+ *       rules:
+ *         type: array
+ *         items:
+ *           type: string
+ */
 const userSchema = yup.object().shape({
   name: yup.string().required(messages.userNameRequired),
   email: yup
@@ -15,6 +39,32 @@ const userSchema = yup.object().shape({
     .min(8, messages.userPassInvalid),
 });
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *  UserLogin:
+ *    type: object
+ *    required:
+ *      - email
+ *      - password
+ *    properties:
+ *       password:
+ *         type: string
+ *         format: password
+ *       email:
+ *         type: string
+ *         format: email
+ *
+ *  UserReturn:
+ *   type: object
+ *   properties:
+ *     token:
+ *       type: string
+ *     user:
+ *       $ref: '#/definitions/User'
+ *
+ */
 const loginSchema = yup.object().shape({
   email: yup
     .string()

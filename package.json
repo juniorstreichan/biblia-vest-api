@@ -10,7 +10,7 @@
     "start": "node dist/server.js",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",
-    "swagger": "yarn swagger-jsdoc -d src/configs/swagger-info.js src/routes/*.js src/models/*.js -o src/configs/swagger.json"
+    "swagger": "yarn swagger-jsdoc -d src/configs/swagger-info.js src/routes/*.js src/middlewares/*.js -o src/configs/swagger.json"
   },
   "keywords": [],
   "author": "Junior Erdmann Streichan",
