@@ -13,6 +13,7 @@ authRouter.baseUrl = '/auth';
  * @swagger
  * /auth:
  *   post:
+ *     summary: Login in the API
  *     description: Login in the API
  *     parameters:
  *       - in: body
@@ -39,8 +40,10 @@ authRouter.post('/', loginMiddleware, AuthController.login);
 
 /**
  * @swagger
+ *
  * /auth/create:
  *  post:
+ *    summary: Create a new User
  *    description: Create a new User
  *    parameters:
  *      - in: body

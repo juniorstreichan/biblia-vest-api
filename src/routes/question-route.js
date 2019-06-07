@@ -10,7 +10,29 @@ import {
 
 const questionRoute = Router();
 questionRoute.baseUrl = '/questions';
-
+/**
+ * @swagger
+ *
+ *  /questions:
+ *   post:
+ *     summary: Add new Question
+ *     description: Add new Question
+ *     parameters:
+ *       - in: body
+ *         name: question
+ *         required: true
+ *         schema:
+ *           $ref: '#/definitions/NewQuestion'
+ *     responses:
+ *       201:
+ *         description: CREATED
+ *         schema:
+ *           $ref: '#/definitions/Question'
+ *       '400':
+ *         description: Bad Request
+ *       '422':
+ *         description: Not valid
+ */
 questionRoute.post(
   '/',
   jwtAuthenticationMiddleware,

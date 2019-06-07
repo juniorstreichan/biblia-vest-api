@@ -61,7 +61,7 @@ const newQuestionSchema = yup.object().shape({
  * @swagger
  *
  * definitions:
- *  UpdateQuestion:
+ *  Question:
  *    allOf:
  *      - $ref: '#/definitions/NewQuestion'
  *      - required:
