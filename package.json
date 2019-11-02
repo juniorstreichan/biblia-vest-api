@@ -37,7 +37,7 @@
     "express": "^4.16.4",
     "helmet": "^3.16.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.5.3",
+    "mongoose": "^5.7.5",
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.3",
     "swagger-jsdoc": "^3.2.9",
