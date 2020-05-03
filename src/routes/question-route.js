@@ -87,7 +87,11 @@ questionRoute.put(
  *       '400':
  *            description: Bad Request
  */
-questionRoute.get('/', QuestionController.getValid);
+questionRoute.get(
+  '/',
+  jwtAuthenticationMiddleware,
+  QuestionController.getValid,
+);
 
 questionRoute.post('/test-jwt', jwtAuthenticationMiddleware, (req, res) => {
   //  rota para testes unitários
