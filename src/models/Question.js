@@ -18,6 +18,7 @@ const QuestionSchema = new Schema(
         },
       },
     ],
+    creator: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     correct: { type: Number, min: 1, required: true },
     categories: [{ type: Schema.Types.ObjectId, ref: 'Category' }],
     active: { type: Boolean, default: true, required: true },

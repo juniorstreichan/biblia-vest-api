@@ -20,6 +20,10 @@ class UserService {
     logger.info(`User: [${user ? user.name : 'Not found'}]`);
     return user;
   }
+
+  async findById(id) {
+    return repository.findById(id);
+  }
 }
 
 export default new UserService();

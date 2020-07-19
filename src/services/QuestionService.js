@@ -15,7 +15,9 @@ class QuestionService {
     const questions = await Repository.find(
       { active: true },
       'description alternatives correct',
-    ).populate('categories');
+    )
+      .populate('categories', 'name')
+      .populate('creator', 'name');
 
     return questions;
   }
@@ -27,7 +29,8 @@ class QuestionService {
       limit: perPage,
     })
       .sort({ createdAt: -1 })
-      .populate('categories');
+      .populate('categories', 'name')
+      .populate('creator', 'name');
 
     return questions;
   }
@@ -36,7 +39,7 @@ class QuestionService {
     const questions = await Repository.find(
       { active: true, updatedAt: { $gte: date } },
       'description alternatives correct',
-    ).populate('categories');
+    ).populate('categories', 'name');
 
     return questions;
   }

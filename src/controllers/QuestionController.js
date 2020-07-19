@@ -4,7 +4,11 @@ import logger from '../tools/logger';
 class QuestionController {
   async store(req, res) {
     try {
-      const newQuestion = await QuestionService.create(req.body);
+      const question = req.body;
+
+      question.creator = req.userId;
+
+      const newQuestion = await QuestionService.create(question);
       return res.status(201).send(newQuestion);
     } catch (error) {
       logger.info(`[error] ${error}`);
