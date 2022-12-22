@@ -36,7 +36,7 @@
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.7.5",
     "regenerator-runtime": "^0.13.2",
     "rimraf": "^2.6.3",
